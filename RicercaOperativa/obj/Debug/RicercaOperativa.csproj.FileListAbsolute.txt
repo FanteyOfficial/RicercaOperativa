@@ -1,0 +1,10 @@
+D:\Programmi\C#\RicercaOperativa\RicercaOperativa\bin\Debug\RicercaOperativa.exe.config
+D:\Programmi\C#\RicercaOperativa\RicercaOperativa\bin\Debug\RicercaOperativa.exe
+D:\Programmi\C#\RicercaOperativa\RicercaOperativa\bin\Debug\RicercaOperativa.pdb
+D:\Programmi\C#\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.csproj.AssemblyReference.cache
+D:\Programmi\C#\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.Form1.resources
+D:\Programmi\C#\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.Properties.Resources.resources
+D:\Programmi\C#\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.csproj.GenerateResource.cache
+D:\Programmi\C#\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.csproj.CoreCompileInputs.cache
+D:\Programmi\C#\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.exe
+D:\Programmi\C#\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.pdb
