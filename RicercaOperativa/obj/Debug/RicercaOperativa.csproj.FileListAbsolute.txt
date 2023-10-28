@@ -8,3 +8,13 @@ D:\Programmi\C#\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.csp
 D:\Programmi\C#\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.csproj.CoreCompileInputs.cache
 D:\Programmi\C#\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.exe
 D:\Programmi\C#\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.pdb
+D:\ProgrammingFolder\VS22\RicercaOperativa\RicercaOperativa\bin\Debug\RicercaOperativa.exe.config
+D:\ProgrammingFolder\VS22\RicercaOperativa\RicercaOperativa\bin\Debug\RicercaOperativa.exe
+D:\ProgrammingFolder\VS22\RicercaOperativa\RicercaOperativa\bin\Debug\RicercaOperativa.pdb
+D:\ProgrammingFolder\VS22\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.csproj.AssemblyReference.cache
+D:\ProgrammingFolder\VS22\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.Form1.resources
+D:\ProgrammingFolder\VS22\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.Properties.Resources.resources
+D:\ProgrammingFolder\VS22\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.csproj.GenerateResource.cache
+D:\ProgrammingFolder\VS22\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.csproj.CoreCompileInputs.cache
+D:\ProgrammingFolder\VS22\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.exe
+D:\ProgrammingFolder\VS22\RicercaOperativa\RicercaOperativa\obj\Debug\RicercaOperativa.pdb

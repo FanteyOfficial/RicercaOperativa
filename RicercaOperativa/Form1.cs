@@ -151,23 +151,33 @@ namespace RicercaOperativa
             int min = (int) MinNum.Value;
             int max = (int) MaxNum.Value;
 
-            DataGridViewRow row = DataTable.Rows[nRows];
-            for (int i = 0; i < nRows; i++)
+            for (int i = 0; i < nCols; i++)
             {
+                Console.WriteLine(nRows);
+                Console.WriteLine(i);
+
                 DataTable.Rows[nRows].Cells[i].Value = r.Next(min, max);
             }
 
-            foreach (DataGridViewRow row1 in DataTable.Rows)
+            foreach (DataGridViewRow row in DataTable.Rows)
             {
-                if (!row1.Cells[nCols].ReadOnly)
+                if (!row.Cells[nCols].ReadOnly)
                 {
-                    row1.Cells[nCols].Value = r.Next(min, max);
+                    row.Cells[nCols].Value = r.Next(min, max);
                 }
             }
             
             if (!TotalRowsController())
             {
-                DataTable.Rows[nRows].Cells[nCols - 1].Value = totalColumnSum() - (totalRowSum() - (int) DataTable.Rows[nRows].Cells[nCols - 1].Value);
+                if (totalRowSum() > totalColumnSum())
+                {
+                    DataTable.Rows[nRows-1].Cells[nCols].Value = (int) DataTable.Rows[nRows-1].Cells[nCols].Value + (totalRowSum() - totalColumnSum());
+                }
+                else
+                {
+                    DataTable.Rows[nRows].Cells[nCols-1].Value = (int) DataTable.Rows[nRows].Cells[nCols-1].Value + (totalColumnSum() - totalRowSum());
+                }
+                
             }
         }
     }
