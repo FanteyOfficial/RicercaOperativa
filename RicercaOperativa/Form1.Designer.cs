@@ -29,8 +29,12 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.NordOvestBTN = new System.Windows.Forms.Button();
+            this.TotalsGeneratorBTN = new System.Windows.Forms.Button();
+            this.TotalsVerifiedLabel = new System.Windows.Forms.Label();
             this.FillTableBTN = new System.Windows.Forms.Button();
             this.CreateTableBTN = new System.Windows.Forms.Button();
+            this.ControlTotalsBTN = new System.Windows.Forms.Button();
             this.MaxNum = new System.Windows.Forms.NumericUpDown();
             this.MinNum = new System.Windows.Forms.NumericUpDown();
             this.MaxLabel = new System.Windows.Forms.Label();
@@ -41,20 +45,23 @@
             this.ColumnLabel = new System.Windows.Forms.Label();
             this.RowLabel = new System.Windows.Forms.Label();
             this.DataTable = new System.Windows.Forms.DataGridView();
-            this.ControlTotalsBTN = new System.Windows.Forms.Button();
-            this.TotalsVerifiedLabel = new System.Windows.Forms.Label();
-            this.TotalsGeneratorBTN = new System.Windows.Forms.Button();
+            this.Frames = new System.Windows.Forms.TabControl();
+            this.MainFrame = new System.Windows.Forms.TabPage();
+            this.NordOvestFrame = new System.Windows.Forms.TabPage();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MaxNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MinNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ColumnNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RowNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataTable)).BeginInit();
+            this.Frames.SuspendLayout();
+            this.MainFrame.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.NordOvestBTN);
             this.panel1.Controls.Add(this.TotalsGeneratorBTN);
             this.panel1.Controls.Add(this.TotalsVerifiedLabel);
             this.panel1.Controls.Add(this.FillTableBTN);
@@ -72,8 +79,41 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1115, 125);
+            this.panel1.Size = new System.Drawing.Size(1355, 125);
             this.panel1.TabIndex = 0;
+            // 
+            // NordOvestBTN
+            // 
+            this.NordOvestBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.NordOvestBTN.Location = new System.Drawing.Point(1080, 11);
+            this.NordOvestBTN.Name = "NordOvestBTN";
+            this.NordOvestBTN.Size = new System.Drawing.Size(219, 45);
+            this.NordOvestBTN.TabIndex = 14;
+            this.NordOvestBTN.Text = "Nord Ovest";
+            this.NordOvestBTN.UseVisualStyleBackColor = true;
+            this.NordOvestBTN.Click += new System.EventHandler(this.NordOvestAlgorithm);
+            // 
+            // TotalsGeneratorBTN
+            // 
+            this.TotalsGeneratorBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.TotalsGeneratorBTN.Location = new System.Drawing.Point(794, 65);
+            this.TotalsGeneratorBTN.Name = "TotalsGeneratorBTN";
+            this.TotalsGeneratorBTN.Size = new System.Drawing.Size(219, 45);
+            this.TotalsGeneratorBTN.TabIndex = 13;
+            this.TotalsGeneratorBTN.Text = "Genera Totali";
+            this.TotalsGeneratorBTN.UseVisualStyleBackColor = true;
+            this.TotalsGeneratorBTN.Click += new System.EventHandler(this.FillTotals);
+            // 
+            // TotalsVerifiedLabel
+            // 
+            this.TotalsVerifiedLabel.AutoSize = true;
+            this.TotalsVerifiedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold);
+            this.TotalsVerifiedLabel.ForeColor = System.Drawing.Color.Red;
+            this.TotalsVerifiedLabel.Location = new System.Drawing.Point(1019, 13);
+            this.TotalsVerifiedLabel.Name = "TotalsVerifiedLabel";
+            this.TotalsVerifiedLabel.Size = new System.Drawing.Size(37, 36);
+            this.TotalsVerifiedLabel.TabIndex = 12;
+            this.TotalsVerifiedLabel.Text = "X";
             // 
             // FillTableBTN
             // 
@@ -96,6 +136,18 @@
             this.CreateTableBTN.Text = "Genera Tabella";
             this.CreateTableBTN.UseVisualStyleBackColor = true;
             this.CreateTableBTN.Click += new System.EventHandler(this.CreateTable_OnClick);
+            // 
+            // ControlTotalsBTN
+            // 
+            this.ControlTotalsBTN.Enabled = false;
+            this.ControlTotalsBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.ControlTotalsBTN.Location = new System.Drawing.Point(794, 11);
+            this.ControlTotalsBTN.Name = "ControlTotalsBTN";
+            this.ControlTotalsBTN.Size = new System.Drawing.Size(219, 45);
+            this.ControlTotalsBTN.TabIndex = 11;
+            this.ControlTotalsBTN.Text = "Controlla Totali";
+            this.ControlTotalsBTN.UseVisualStyleBackColor = true;
+            this.ControlTotalsBTN.Click += new System.EventHandler(this.controlTotal);
             // 
             // MaxNum
             // 
@@ -226,54 +278,52 @@
             this.DataTable.AllowUserToDeleteRows = false;
             this.DataTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DataTable.Location = new System.Drawing.Point(0, 125);
+            this.DataTable.Location = new System.Drawing.Point(3, 3);
             this.DataTable.Name = "DataTable";
             this.DataTable.RowHeadersWidth = 51;
             this.DataTable.RowTemplate.Height = 24;
-            this.DataTable.Size = new System.Drawing.Size(1115, 410);
+            this.DataTable.Size = new System.Drawing.Size(1341, 375);
             this.DataTable.TabIndex = 1;
             // 
-            // ControlTotalsBTN
+            // Frames
             // 
-            this.ControlTotalsBTN.Enabled = false;
-            this.ControlTotalsBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.ControlTotalsBTN.Location = new System.Drawing.Point(794, 11);
-            this.ControlTotalsBTN.Name = "ControlTotalsBTN";
-            this.ControlTotalsBTN.Size = new System.Drawing.Size(219, 45);
-            this.ControlTotalsBTN.TabIndex = 11;
-            this.ControlTotalsBTN.Text = "Controlla Totali";
-            this.ControlTotalsBTN.UseVisualStyleBackColor = true;
-            this.ControlTotalsBTN.Click += new System.EventHandler(this.controlTotal);
+            this.Frames.Controls.Add(this.MainFrame);
+            this.Frames.Controls.Add(this.NordOvestFrame);
+            this.Frames.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Frames.Location = new System.Drawing.Point(0, 125);
+            this.Frames.Name = "Frames";
+            this.Frames.SelectedIndex = 0;
+            this.Frames.Size = new System.Drawing.Size(1355, 410);
+            this.Frames.TabIndex = 15;
             // 
-            // TotalsVerifiedLabel
+            // MainFrame
             // 
-            this.TotalsVerifiedLabel.AutoSize = true;
-            this.TotalsVerifiedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold);
-            this.TotalsVerifiedLabel.ForeColor = System.Drawing.Color.Red;
-            this.TotalsVerifiedLabel.Location = new System.Drawing.Point(1019, 13);
-            this.TotalsVerifiedLabel.Name = "TotalsVerifiedLabel";
-            this.TotalsVerifiedLabel.Size = new System.Drawing.Size(37, 36);
-            this.TotalsVerifiedLabel.TabIndex = 12;
-            this.TotalsVerifiedLabel.Text = "X";
+            this.MainFrame.Controls.Add(this.DataTable);
+            this.MainFrame.Location = new System.Drawing.Point(4, 25);
+            this.MainFrame.Name = "MainFrame";
+            this.MainFrame.Padding = new System.Windows.Forms.Padding(3);
+            this.MainFrame.Size = new System.Drawing.Size(1347, 381);
+            this.MainFrame.TabIndex = 0;
+            this.MainFrame.Text = "Main View";
+            this.MainFrame.UseVisualStyleBackColor = true;
             // 
-            // TotalsGeneratorBTN
+            // NordOvestFrame
             // 
-            this.TotalsGeneratorBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.TotalsGeneratorBTN.Location = new System.Drawing.Point(794, 65);
-            this.TotalsGeneratorBTN.Name = "TotalsGeneratorBTN";
-            this.TotalsGeneratorBTN.Size = new System.Drawing.Size(219, 45);
-            this.TotalsGeneratorBTN.TabIndex = 13;
-            this.TotalsGeneratorBTN.Text = "Genera Totali";
-            this.TotalsGeneratorBTN.UseVisualStyleBackColor = true;
-            this.TotalsGeneratorBTN.Click += new System.EventHandler(this.FillTotals);
+            this.NordOvestFrame.Location = new System.Drawing.Point(4, 25);
+            this.NordOvestFrame.Name = "NordOvestFrame";
+            this.NordOvestFrame.Padding = new System.Windows.Forms.Padding(3);
+            this.NordOvestFrame.Size = new System.Drawing.Size(1347, 381);
+            this.NordOvestFrame.TabIndex = 1;
+            this.NordOvestFrame.Text = "NordOvest";
+            this.NordOvestFrame.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
-            this.ClientSize = new System.Drawing.Size(1115, 535);
-            this.Controls.Add(this.DataTable);
+            this.ClientSize = new System.Drawing.Size(1355, 535);
+            this.Controls.Add(this.Frames);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -288,6 +338,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ColumnNum)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.RowNum)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataTable)).EndInit();
+            this.Frames.ResumeLayout(false);
+            this.MainFrame.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -310,6 +362,10 @@
         private System.Windows.Forms.Button ControlTotalsBTN;
         private System.Windows.Forms.Label TotalsVerifiedLabel;
         private System.Windows.Forms.Button TotalsGeneratorBTN;
+        private System.Windows.Forms.Button NordOvestBTN;
+        private System.Windows.Forms.TabControl Frames;
+        private System.Windows.Forms.TabPage MainFrame;
+        private System.Windows.Forms.TabPage NordOvestFrame;
     }
 }
 
