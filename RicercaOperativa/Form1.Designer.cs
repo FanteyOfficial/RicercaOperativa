@@ -84,6 +84,7 @@
             // 
             // NordOvestBTN
             // 
+            this.NordOvestBTN.Enabled = false;
             this.NordOvestBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.NordOvestBTN.Location = new System.Drawing.Point(1080, 11);
             this.NordOvestBTN.Name = "NordOvestBTN";
@@ -95,6 +96,7 @@
             // 
             // TotalsGeneratorBTN
             // 
+            this.TotalsGeneratorBTN.Enabled = false;
             this.TotalsGeneratorBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.TotalsGeneratorBTN.Location = new System.Drawing.Point(794, 65);
             this.TotalsGeneratorBTN.Name = "TotalsGeneratorBTN";
@@ -117,6 +119,7 @@
             // 
             // FillTableBTN
             // 
+            this.FillTableBTN.Enabled = false;
             this.FillTableBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.FillTableBTN.Location = new System.Drawing.Point(569, 65);
             this.FillTableBTN.Name = "FillTableBTN";

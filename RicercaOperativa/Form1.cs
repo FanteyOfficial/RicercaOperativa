@@ -51,7 +51,11 @@ namespace RicercaOperativa
             DataTable.Rows[nRows].Cells[nCols].ReadOnly = true;
 
             DataTable.Refresh();
+            
             ControlTotalsBTN.Enabled = true;
+            NordOvestBTN.Enabled = true;
+            FillTableBTN.Enabled = true;
+            TotalsGeneratorBTN.Enabled = true;
         }
 
         private int totalRowSum()
@@ -209,20 +213,40 @@ namespace RicercaOperativa
                 cloneDataGridView.Rows.Add(dataRow);
             }
             cloneDataGridView.AllowUserToAddRows = false;
-            cloneDataGridView.Refresh();
 
+            cloneDataGridView.Refresh();
 
             return cloneDataGridView;
         }
 
         private void NordOvestAlgorithm(object sender, EventArgs e)
         {
+            if (NordOvestFrame.Controls.Count > 0)
+            {
+                NordOvestFrame.Controls.Clear();
+            }
             DataGridView nordOvestGrid = CloneDataGrid(DataTable);
             nordOvestGrid.Dock = DockStyle.Fill;
             nordOvestGrid.AutoResizeColumnHeadersHeight();
             nordOvestGrid.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+            nordOvestGrid.ReadOnly = true;
 
             NordOvestFrame.Controls.Add(nordOvestGrid);
+            Frames.SelectedTab = NordOvestFrame;
+
+            NordOvestAlgorithm(nordOvestGrid);
+        }
+
+        private void NordOvestAlgorithm(DataGridView grid)
+        {
+            int totale = 0;
+            for (int i=0; i<grid.Rows.Count-1; i++)
+            {
+                for (int j=0; j < grid.Rows[i].Cells.Count-1; j++)
+                {
+
+                }
+            }
         }
     }
 }
