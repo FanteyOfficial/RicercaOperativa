@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -157,8 +158,8 @@ namespace RicercaOperativa
 
             for (int i = 0; i < nCols; i++)
             {
-                Console.WriteLine(nRows);
-                Console.WriteLine(i);
+                //Console.WriteLine(nRows);
+                //Console.WriteLine(i);
 
                 DataTable.Rows[nRows].Cells[i].Value = r.Next(min, max);
             }
@@ -239,14 +240,107 @@ namespace RicercaOperativa
 
         private void NordOvestAlgorithm(DataGridView grid)
         {
-            int totale = 0;
-            for (int i=0; i<grid.Rows.Count-1; i++)
-            {
-                for (int j=0; j < grid.Rows[i].Cells.Count-1; j++)
-                {
+            int costoTot = 0;
+            int currentD = 0;
+            int currentUP = 0;
 
+            int[,] arr = TableToMatrix(grid);
+
+            while (currentUP < arr.GetLength(0) - 1 && currentD < arr.GetLength(1) - 1)
+            {
+                if (NordOvestFrame.Controls.Count > 0)
+                {
+                    NordOvestFrame.Controls.Clear();
+                }
+                DataGridView nordOvestGrid = DataGridFromMatrix(arr);
+                nordOvestGrid.Dock = DockStyle.Fill;
+                nordOvestGrid.AutoResizeColumnHeadersHeight();
+                nordOvestGrid.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                nordOvestGrid.ReadOnly = true;
+
+                NordOvestFrame.Controls.Add(nordOvestGrid);
+                Frames.SelectedTab = NordOvestFrame;
+
+                
+
+                int UPn = arr[currentUP, arr.GetLength(1) - 1];
+                int Dn = arr[arr.GetLength(0) - 1, currentD];
+                int price = arr[currentUP, currentD];
+
+                Console.WriteLine($"Da UP: {currentUP} a D: {currentD}");
+
+                if (UPn >= Dn)
+                {
+                    costoTot += price * Dn;
+                    arr[currentUP, arr.GetLength(1) - 1] -= Dn;
+                    arr[arr.GetLength(0) - 1, currentD] = 0;
+                    Console.WriteLine(price * Dn);
+                    currentD++;
+                }
+                else
+                {
+                    costoTot += price * UPn;
+                    arr[currentUP, arr.GetLength(1) - 1] = 0;
+                    arr[arr.GetLength(0) - 1, currentD] -= UPn;
+                    Console.WriteLine(price * UPn);
+                    currentUP++;
                 }
             }
+
+            Console.WriteLine(costoTot);
+        }
+
+        private int[,] TableToMatrix(DataGridView grid)
+        {
+            int[,] arr2d = new int[grid.Rows.Count, grid.Columns.Count];
+
+            for (int x = 0; x < arr2d.GetLength(0); x++)
+                for (int i = 0; i < arr2d.GetLength(1); i++)
+                    arr2d[x, i] = Convert.ToInt32(grid.Rows[x].Cells[i].Value);
+
+            return arr2d;
+        }
+
+        private DataGridView DataGridFromMatrix(int[,] matrix)
+        {
+            DataGridView cloneDataGridView = new DataGridView();
+
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
+
+            if (cloneDataGridView.Columns.Count == 0 && cols > 0)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
+                    cloneDataGridView.Columns.Add(column);
+                }
+            }
+
+            for (int i = 0; i < rows; i++)
+            {
+                if (matrix.GetLength(1) > 0 && matrix[i, 0] == 0)
+                {
+                    continue;
+                }
+
+                object[] rowData = new object[cols];
+                for (int j = 0; j < cols; j++)
+                {
+                    rowData[j] = matrix[i, j];
+                }
+                cloneDataGridView.Rows.Add(rowData);
+            }
+
+            if (matrix.GetLength(0) > 0 && matrix[0, cols - 1] == 0)
+            {
+                cloneDataGridView.Columns.RemoveAt(cols - 1);
+            }
+
+            cloneDataGridView.AllowUserToAddRows = false;
+            cloneDataGridView.Refresh();
+
+            return cloneDataGridView;
         }
     }
 }
