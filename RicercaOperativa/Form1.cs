@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -20,6 +22,8 @@ namespace RicercaOperativa
         public Form1()
         {
             InitializeComponent();
+            OutputWindow o = new OutputWindow();
+            o.Show();
         }
 
         private void CreateTable_OnClick(object sender, EventArgs e)
@@ -341,6 +345,38 @@ namespace RicercaOperativa
             cloneDataGridView.Refresh();
 
             return cloneDataGridView;
+        }
+    }
+
+    public partial class OutputWindow : Form
+    {
+        Label content = new Label();
+        public OutputWindow()
+        {
+            this.TopMost = true;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+        
+            Label title = new Label();
+            title.Text = "Output";
+            //title.Location = new Point(0, 0);
+            title.Dock = DockStyle.Top;
+            title.Font = new Font("Arial", 12, FontStyle.Bold);
+            this.Controls.Add(title);
+
+            
+            content.Text = "";
+            //content.Location = new Point(10, 10);
+            content.Dock = DockStyle.Fill;
+            content.BorderStyle = BorderStyle.FixedSingle;
+            content.Font = new Font("Arial", 12, FontStyle.Regular);
+            this.Controls.Add(content);
+        }
+
+        public void addLineString(String str)
+        {
+            content.Text += str;
         }
     }
 }
