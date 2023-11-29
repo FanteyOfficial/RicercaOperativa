@@ -1,16 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace RicercaOperativa
@@ -61,6 +50,8 @@ namespace RicercaOperativa
             NordOvestBTN.Enabled = true;
             FillTableBTN.Enabled = true;
             TotalsGeneratorBTN.Enabled = true;
+            FillTotalTableBTN.Enabled = true;
+            MinimalCostsBTN.Enabled = true;
         }
 
         private int totalRowSum()
@@ -137,8 +128,26 @@ namespace RicercaOperativa
             }
         }
 
+        private void controlTotal()
+        {
+            if (TotalRowsController())
+            {
+                DataTable.Rows[nRows].Cells[nCols].Value = totalRowSum();
+                TotalsVerifiedLabel.Text = "✔";
+                TotalsVerifiedLabel.ForeColor = Color.Green;
+            }
+            else
+            {
+                MessageBox.Show("La somma dei valori non corrisponde o le celle non sono tutte piene!");
+                TotalsVerifiedLabel.Text = "X";
+                TotalsVerifiedLabel.ForeColor = Color.Red;
+            }
+        }
+
         private void FillTable(object sender, EventArgs e)
         {
+            SetDefaultNumberGenerator();
+
             int min = (int) MinNum.Value;
             int max = (int) MaxNum.Value;
 
@@ -152,9 +161,35 @@ namespace RicercaOperativa
             }
         }
 
+        private void FillTable()
+        {
+            SetDefaultNumberGenerator();
+
+            int min = (int)MinNum.Value;
+            int max = (int)MaxNum.Value;
+
+            Random r = new Random();
+
+            for (int i = 0; i < nRows; i++)
+            {
+                for (int j = 0; j < nCols; j++)
+                {
+                    DataTable.Rows[i].Cells[j].Value = r.Next(min, max);
+                }
+            }
+        }
+
+        private void SetDefaultNumberGenerator()
+        {
+            if (MinNum.Value == 0) MinNum.Value = 10;
+            if (MaxNum.Value == 0) MaxNum.Value = 100;
+        }
+
         // riempimento casuale dei totali
         private void FillTotals(object sender, EventArgs e)
         {
+            SetDefaultNumberGenerator();
+
             Random r = new Random();
 
             int min = (int) MinNum.Value;
@@ -188,6 +223,53 @@ namespace RicercaOperativa
                 }
                 
             }
+            controlTotal();
+        }
+
+        private void FillTotals()
+        {
+            SetDefaultNumberGenerator();
+
+            Random r = new Random();
+
+            int min = (int)MinNum.Value;
+            int max = (int)MaxNum.Value;
+
+            for (int i = 0; i < nCols; i++)
+            {
+                //Console.WriteLine(nRows);
+                //Console.WriteLine(i);
+
+                DataTable.Rows[nRows].Cells[i].Value = r.Next(min, max);
+            }
+
+            foreach (DataGridViewRow row in DataTable.Rows)
+            {
+                if (!row.Cells[nCols].ReadOnly)
+                {
+                    row.Cells[nCols].Value = r.Next(min, max);
+                }
+            }
+
+            if (!TotalRowsController())
+            {
+                if (totalRowSum() > totalColumnSum())
+                {
+                    DataTable.Rows[nRows - 1].Cells[nCols].Value = (int)DataTable.Rows[nRows - 1].Cells[nCols].Value + (totalRowSum() - totalColumnSum());
+                }
+                else
+                {
+                    DataTable.Rows[nRows].Cells[nCols - 1].Value = (int)DataTable.Rows[nRows].Cells[nCols - 1].Value + (totalColumnSum() - totalRowSum());
+                }
+
+            }
+            controlTotal();
+        }
+
+        private void FillTotalTable(object sender, EventArgs e)
+        {
+            FillTable();
+            FillTotals();
         }
 
         private DataGridView CloneDataGrid(DataGridView mainDataGridView)
@@ -222,7 +304,7 @@ namespace RicercaOperativa
             return cloneDataGridView;
         }
 
-        private void NordOvestAlgorithm(object sender, EventArgs e)
+        private void NordOvestAlgorithm_Click(object sender, EventArgs e)
         {
             if (NordOvestFrame.Controls.Count > 0)
             {
@@ -237,6 +319,7 @@ namespace RicercaOperativa
             NordOvestFrame.Controls.Add(nordOvestGrid);
             Frames.SelectedTab = NordOvestFrame;
 
+            //ResetOutputWindow();
             ow.Show();
 
             NordOvestAlgorithm(nordOvestGrid);
@@ -303,6 +386,7 @@ namespace RicercaOperativa
                 }
 
                 ow.addLineString($"Da Produttore UP nr.{nUpCorrente} a Consumatore D nr.{nDCorrente} : {unitaVendute} unità a {price.ToString("N2")} € = {costoTemp.ToString("N2")} €");
+
             }
 
             ow.addSeparator();
@@ -362,6 +446,38 @@ namespace RicercaOperativa
             cloneDataGridView.Refresh();
 
             return cloneDataGridView;
+        }
+
+        private void ResetOutputWindow()
+        {
+            ow = new OutputWindow();
+        }
+
+        private void MinimalCostsAlgorithm_Click(object sender, EventArgs e)
+        {
+            if (MinimalCostsFrame.Controls.Count > 0)
+            {
+                MinimalCostsFrame.Controls.Clear();
+            }
+            DataGridView minimalCostsGrid = CloneDataGrid(DataTable);
+            minimalCostsGrid.Dock = DockStyle.Fill;
+            minimalCostsGrid.AutoResizeColumnHeadersHeight();
+            minimalCostsGrid.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+            minimalCostsGrid.ReadOnly = true;
+
+            MinimalCostsFrame.Controls.Add(minimalCostsGrid);
+            Frames.SelectedTab = MinimalCostsFrame;
+
+            //ResetOutputWindow();
+            ow.Show();
+
+            MinimalCostsAlgorithm(minimalCostsGrid);
+        }
+        
+        private void MinimalCostsAlgorithm(DataGridView grid)
+        {
+            ow.addLineString("Minimi Costi:");
+            ow.addSeparator();
         }
     }
 
