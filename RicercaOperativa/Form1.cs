@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -18,12 +19,11 @@ namespace RicercaOperativa
     {
         private int nRows = 2;
         private int nCols = 2;
+        OutputWindow ow = new OutputWindow();
 
         public Form1()
         {
             InitializeComponent();
-            OutputWindow o = new OutputWindow();
-            o.Show();
         }
 
         private void CreateTable_OnClick(object sender, EventArgs e)
@@ -190,8 +190,6 @@ namespace RicercaOperativa
             }
         }
 
-
-
         private DataGridView CloneDataGrid(DataGridView mainDataGridView)
         {
             DataGridView cloneDataGridView = new DataGridView();
@@ -239,6 +237,8 @@ namespace RicercaOperativa
             NordOvestFrame.Controls.Add(nordOvestGrid);
             Frames.SelectedTab = NordOvestFrame;
 
+            ow.Show();
+
             NordOvestAlgorithm(nordOvestGrid);
         }
 
@@ -249,6 +249,9 @@ namespace RicercaOperativa
             int currentUP = 0;
 
             int[,] arr = TableToMatrix(grid);
+
+            ow.addLineString("Nord Ovest:");
+            ow.addSeparator();
 
             while (currentUP < arr.GetLength(0) - 1 && currentD < arr.GetLength(1) - 1)
             {
@@ -271,27 +274,41 @@ namespace RicercaOperativa
                 int Dn = arr[arr.GetLength(0) - 1, currentD];
                 int price = arr[currentUP, currentD];
 
-                Console.WriteLine($"Da UP: {currentUP} a D: {currentD}");
+                int unitaVendute;
+                int nUpCorrente = currentUP+1;
+                int nDCorrente = currentD+1;
+                int costoTemp;
 
                 if (UPn >= Dn)
                 {
                     costoTot += price * Dn;
                     arr[currentUP, arr.GetLength(1) - 1] -= Dn;
                     arr[arr.GetLength(0) - 1, currentD] = 0;
-                    Console.WriteLine(price * Dn);
+                    //Console.WriteLine(price * Dn);
                     currentD++;
+
+                    unitaVendute = Dn;
+                    costoTemp = price * Dn;
                 }
                 else
                 {
                     costoTot += price * UPn;
                     arr[currentUP, arr.GetLength(1) - 1] = 0;
                     arr[arr.GetLength(0) - 1, currentD] -= UPn;
-                    Console.WriteLine(price * UPn);
+                    //Console.WriteLine(price * UPn);
                     currentUP++;
+
+                    unitaVendute = UPn;
+                    costoTemp = price * UPn;
                 }
+
+                ow.addLineString($"Da Produttore UP nr.{nUpCorrente} a Consumatore D nr.{nDCorrente} : {unitaVendute} unità a {price.ToString("N2")} € = {costoTemp.ToString("N2")} €");
             }
 
-            Console.WriteLine(costoTot);
+            ow.addSeparator();
+            ow.addLineString($"Costo totale: {costoTot.ToString("N2")} €");
+            ow.addSeparator();
+            ow.addBreakLine();
         }
 
         private int[,] TableToMatrix(DataGridView grid)
@@ -350,33 +367,38 @@ namespace RicercaOperativa
 
     public partial class OutputWindow : Form
     {
-        Label content = new Label();
+        ListBox outputListBox = new ListBox();
         public OutputWindow()
         {
             this.TopMost = true;
             this.MinimizeBox = false;
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-        
-            Label title = new Label();
-            title.Text = "Output";
-            //title.Location = new Point(0, 0);
-            title.Dock = DockStyle.Top;
-            title.Font = new Font("Arial", 12, FontStyle.Bold);
-            this.Controls.Add(title);
 
+            this.Text = "Output";
+
+            this.Width = 700;
+            this.Height = 700;
             
-            content.Text = "";
-            //content.Location = new Point(10, 10);
-            content.Dock = DockStyle.Fill;
-            content.BorderStyle = BorderStyle.FixedSingle;
-            content.Font = new Font("Arial", 12, FontStyle.Regular);
-            this.Controls.Add(content);
+            outputListBox.Font = new Font("Arial", 12, FontStyle.Regular);
+            outputListBox.Dock = DockStyle.Fill;
+
+            this.Controls.Add(outputListBox);
         }
 
         public void addLineString(String str)
         {
-            content.Text += str;
+            outputListBox.Items.Add(str);
+        }
+
+        public void addSeparator()
+        {
+            outputListBox.Items.Add("---------------------------");
+        }
+
+        public void addBreakLine()
+        {
+            outputListBox.Items.Add('\n');
         }
     }
 }
