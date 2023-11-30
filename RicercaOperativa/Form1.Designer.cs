@@ -49,8 +49,8 @@
             this.DataTable = new System.Windows.Forms.DataGridView();
             this.Frames = new System.Windows.Forms.TabControl();
             this.MainFrame = new System.Windows.Forms.TabPage();
-            this.NordOvestFrame = new System.Windows.Forms.TabPage();
             this.MinimalCostsFrame = new System.Windows.Forms.TabPage();
+            this.NordOvestFrame = new System.Windows.Forms.TabPage();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MaxNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MinNum)).BeginInit();
@@ -339,8 +339,8 @@
             // Frames
             // 
             this.Frames.Controls.Add(this.MainFrame);
-            this.Frames.Controls.Add(this.MinimalCostsFrame);
             this.Frames.Controls.Add(this.NordOvestFrame);
+            this.Frames.Controls.Add(this.MinimalCostsFrame);
             this.Frames.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Frames.Location = new System.Drawing.Point(0, 102);
             this.Frames.Margin = new System.Windows.Forms.Padding(2);
@@ -361,17 +361,6 @@
             this.MainFrame.Text = "Main View";
             this.MainFrame.UseVisualStyleBackColor = true;
             // 
-            // NordOvestFrame
-            // 
-            this.NordOvestFrame.Location = new System.Drawing.Point(4, 22);
-            this.NordOvestFrame.Margin = new System.Windows.Forms.Padding(2);
-            this.NordOvestFrame.Name = "NordOvestFrame";
-            this.NordOvestFrame.Padding = new System.Windows.Forms.Padding(2);
-            this.NordOvestFrame.Size = new System.Drawing.Size(1168, 307);
-            this.NordOvestFrame.TabIndex = 1;
-            this.NordOvestFrame.Text = "NordOvest";
-            this.NordOvestFrame.UseVisualStyleBackColor = true;
-            // 
             // MinimalCostsFrame
             // 
             this.MinimalCostsFrame.Location = new System.Drawing.Point(4, 22);
@@ -382,6 +371,17 @@
             this.MinimalCostsFrame.TabIndex = 2;
             this.MinimalCostsFrame.Text = "MinimalCosts";
             this.MinimalCostsFrame.UseVisualStyleBackColor = true;
+            // 
+            // NordOvestFrame
+            // 
+            this.NordOvestFrame.Location = new System.Drawing.Point(4, 22);
+            this.NordOvestFrame.Margin = new System.Windows.Forms.Padding(2);
+            this.NordOvestFrame.Name = "NordOvestFrame";
+            this.NordOvestFrame.Padding = new System.Windows.Forms.Padding(2);
+            this.NordOvestFrame.Size = new System.Drawing.Size(1168, 307);
+            this.NordOvestFrame.TabIndex = 1;
+            this.NordOvestFrame.Text = "NordOvest";
+            this.NordOvestFrame.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
