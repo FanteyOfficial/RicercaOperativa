@@ -8,6 +8,10 @@ namespace RicercaOperativa
     {
         private int nRows = 2;
         private int nCols = 2;
+
+        static public bool owWasClosed = false;
+        static public bool owIsOpened = false;
+
         OutputWindow ow = new OutputWindow();
 
         public Form1()
@@ -47,11 +51,9 @@ namespace RicercaOperativa
             DataTable.Refresh();
             
             ControlTotalsBTN.Enabled = true;
-            NordOvestBTN.Enabled = true;
             FillTableBTN.Enabled = true;
             TotalsGeneratorBTN.Enabled = true;
             FillTotalTableBTN.Enabled = true;
-            MinimalCostsBTN.Enabled = true;
         }
 
         private int totalRowSum()
@@ -119,12 +121,18 @@ namespace RicercaOperativa
                 DataTable.Rows[nRows].Cells[nCols].Value = totalRowSum();
                 TotalsVerifiedLabel.Text = "✔";
                 TotalsVerifiedLabel.ForeColor = Color.Green;
+
+                NordOvestBTN.Enabled = true;
+                MinimalCostsBTN.Enabled = true;
             } 
             else
             {
                 MessageBox.Show("La somma dei valori non corrisponde o le celle non sono tutte piene!");
                 TotalsVerifiedLabel.Text = "X";
                 TotalsVerifiedLabel.ForeColor = Color.Red;
+
+                NordOvestBTN.Enabled = false;
+                MinimalCostsBTN.Enabled = false;
             }
         }
 
@@ -147,6 +155,7 @@ namespace RicercaOperativa
         private void FillTable(object sender, EventArgs e)
         {
             SetDefaultNumberGenerator();
+            Frames.SelectedTab = MainFrame;
 
             int min = (int) MinNum.Value;
             int max = (int) MaxNum.Value;
@@ -189,6 +198,7 @@ namespace RicercaOperativa
         private void FillTotals(object sender, EventArgs e)
         {
             SetDefaultNumberGenerator();
+            Frames.SelectedTab = MainFrame;
 
             Random r = new Random();
 
@@ -270,6 +280,7 @@ namespace RicercaOperativa
         {
             FillTable();
             FillTotals();
+            Frames.SelectedTab = MainFrame;
         }
 
         private DataGridView CloneDataGrid(DataGridView mainDataGridView)
@@ -319,11 +330,12 @@ namespace RicercaOperativa
             NordOvestFrame.Controls.Add(nordOvestGrid);
             Frames.SelectedTab = NordOvestFrame;
 
-            //ResetOutputWindow();
-            ow.Show();
+            OutputWindowSystem();
 
             NordOvestAlgorithm(nordOvestGrid);
         }
+
+
 
         private void NordOvestAlgorithm(DataGridView grid)
         {
@@ -468,16 +480,100 @@ namespace RicercaOperativa
             MinimalCostsFrame.Controls.Add(minimalCostsGrid);
             Frames.SelectedTab = MinimalCostsFrame;
 
-            //ResetOutputWindow();
-            ow.Show();
+            OutputWindowSystem();
 
             MinimalCostsAlgorithm(minimalCostsGrid);
         }
         
         private void MinimalCostsAlgorithm(DataGridView grid)
         {
+            int costoTot = 0;
+            int currentD = 0;
+            int currentUP = 0;
+
+            int[,] arr = TableToMatrix(grid);
+
             ow.addLineString("Minimi Costi:");
             ow.addSeparator();
+
+            while (currentUP < arr.GetLength(0) - 1 && currentD < arr.GetLength(1) - 1)
+            {
+                if (MinimalCostsFrame.Controls.Count > 0)
+                {
+                    MinimalCostsFrame.Controls.Clear();
+                }
+                DataGridView minimalCostGrid = DataGridFromMatrix(arr);
+                minimalCostGrid.Dock = DockStyle.Fill;
+                minimalCostGrid.AutoResizeColumnHeadersHeight();
+                minimalCostGrid.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                minimalCostGrid.ReadOnly = true;
+
+                MinimalCostsFrame.Controls.Add(minimalCostGrid);
+                Frames.SelectedTab = MinimalCostsFrame;
+
+                int minCost = int.MaxValue;
+                int minCostRow = -1;
+                int minCostCol = -1;
+
+                for (int i = 0; i < arr.GetLength(0) - 1; i++)
+                {
+                    for (int j = 0; j < arr.GetLength(1) - 1; j++)
+                    {
+                        if (arr[i, j] < minCost && arr[i, arr.GetLength(1) - 1] > 0 && arr[arr.GetLength(0) - 1, j] > 0)
+                        {
+                            minCost = arr[i, j];
+                            minCostRow = i;
+                            minCostCol = j;
+                        }
+                    }
+                }
+
+                if (minCostRow == -1 || minCostCol == -1)
+                {
+                    break; // No more cells with positive supply and demand
+                }
+
+                int minSupply = arr[minCostRow, arr.GetLength(1) - 1];
+                int minDemand = arr[arr.GetLength(0) - 1, minCostCol];
+                int transferQuantity = Math.Min(minSupply, minDemand);
+
+                costoTot += transferQuantity * minCost;
+                arr[minCostRow, arr.GetLength(1) - 1] -= transferQuantity;
+                arr[arr.GetLength(0) - 1, minCostCol] -= transferQuantity;
+
+                ow.addLineString($"Da Produttore UP nr.{minCostRow + 1} a Consumatore D nr.{minCostCol + 1} : {transferQuantity} unità a {minCost.ToString("N2")} € = {(transferQuantity * minCost).ToString("N2")} €");
+
+                if (arr[minCostRow, arr.GetLength(1) - 1] == 0)
+                {
+                    currentUP++;
+                }
+
+                if (arr[arr.GetLength(0) - 1, minCostCol] == 0)
+                {
+                    currentD++;
+                }
+            }
+
+            ow.addSeparator();
+            ow.addLineString($"Costo totale: {costoTot.ToString("N2")} €");
+            ow.addSeparator();
+            ow.addBreakLine();
+        }
+
+        public void OutputWindowSystem()
+        {
+            if (!owWasClosed && !owIsOpened)
+            {
+                ow.Show();
+                owIsOpened = true;
+            }
+            else if (!owIsOpened && owWasClosed)
+            {
+                ResetOutputWindow();
+                ow.Show();
+                owIsOpened = true;
+                owWasClosed = false;
+            }
         }
     }
 
@@ -500,6 +596,11 @@ namespace RicercaOperativa
             outputListBox.Dock = DockStyle.Fill;
 
             this.Controls.Add(outputListBox);
+
+            this.FormClosed += (sender, e) => {
+                Form1.owWasClosed = true;
+                Form1.owIsOpened = false;
+            };
         }
 
         public void addLineString(String str)
