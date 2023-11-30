@@ -24,6 +24,7 @@ namespace RicercaOperativa
         private void CreateTable_OnClick(object sender, EventArgs e)
         {
             DataTable.Columns.Clear();
+            DataTable.Rows.Clear();
 
             DataTable.Dock = DockStyle.Fill;
 
@@ -76,43 +77,60 @@ namespace RicercaOperativa
         {
             int rowSum = 0;
 
-            DataGridViewRow row = DataTable.Rows[nRows];
-
-            for (int i = 0; i < row.Cells.Count - 1; i++)
+            if (nRows >= 0 && nRows < DataTable.Rows.Count)
             {
-                DataGridViewCell cell = row.Cells[i];
+                DataGridViewRow row = DataTable.Rows[nRows];
 
-                if (cell.Value != null && cell.Value.ToString() != "")
+                for (int i = 0; i < row.Cells.Count - 1; i++)
                 {
-                    rowSum += Convert.ToInt32(cell.Value);
-                }
-                else
-                {
-                    return -1;
+                    DataGridViewCell cell = row.Cells[i];
+
+                    if (cell.Value != null && cell.Value.ToString() != "")
+                    {
+                        rowSum += Convert.ToInt32(cell.Value);
+                    }
+                    else
+                    {
+                        return -1;
+                    }
                 }
             }
+            else
+            {
+                return -1;
+            }
+
             return rowSum;
         }
         private int totalColumnSum()
         {
             int columnSum = 0;
 
-            foreach (DataGridViewRow row1 in DataTable.Rows)
+            if (nCols >= 0 && nCols < DataTable.Columns.Count)
             {
-                if (row1.Cells[nCols].Value != null && row1.Cells[nCols].Value.ToString() != "")
+                foreach (DataGridViewRow row1 in DataTable.Rows)
                 {
-                    if (row1.Index != DataTable.Rows.Count - 1)
+                    if (row1.Cells[nCols].Value != null && row1.Cells[nCols].Value.ToString() != "")
                     {
-                        columnSum += Convert.ToInt32(row1.Cells[nCols].Value);
+                        if (row1.Index != DataTable.Rows.Count - 1)
+                        {
+                            columnSum += Convert.ToInt32(row1.Cells[nCols].Value);
+                        }
+                    }
+                    else
+                    {
+                        return -1;
                     }
                 }
-                else
-                {
-                    return -1;
-                }
             }
+            else
+            {
+                return -1;
+            }
+
             return columnSum;
         }
+
 
         private bool TotalRowsController()
         {
@@ -285,6 +303,7 @@ namespace RicercaOperativa
         {
             if (MinNum.Value == 0) MinNum.Value = 10;
             if (MaxNum.Value == 0) MaxNum.Value = 100;
+            if (MinNum.Value > MaxNum.Value) MaxNum.Value = MinNum.Value+1;
         }
 
         // riempimento casuale dei totali
