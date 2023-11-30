@@ -12,6 +12,8 @@ namespace RicercaOperativa
         static public bool owWasClosed = false;
         static public bool owIsOpened = false;
 
+        private bool tableTotalsValid = false;
+
         OutputWindow ow = new OutputWindow();
 
         public Form1()
@@ -54,6 +56,20 @@ namespace RicercaOperativa
             FillTableBTN.Enabled = true;
             TotalsGeneratorBTN.Enabled = true;
             FillTotalTableBTN.Enabled = true;
+
+            controlTotalWithoutMessageBox();
+            WireUpDataGridViewEvents(DataTable);
+        }
+
+        private void WireUpDataGridViewEvents(DataGridView dataGridView)
+        {
+            dataGridView.CellValueChanged += CellEndEditHandler;
+        }
+
+        private void CellEndEditHandler(object sender, DataGridViewCellEventArgs e)
+        {
+            controlTotalWithoutMessageBox();
+            BtnAlgorithmActivationControlSystem();
         }
 
         private int totalRowSum()
@@ -121,9 +137,8 @@ namespace RicercaOperativa
                 DataTable.Rows[nRows].Cells[nCols].Value = totalRowSum();
                 TotalsVerifiedLabel.Text = "✔";
                 TotalsVerifiedLabel.ForeColor = Color.Green;
-
-                NordOvestBTN.Enabled = true;
-                MinimalCostsBTN.Enabled = true;
+                
+                tableTotalsValid = true;
             } 
             else
             {
@@ -131,9 +146,10 @@ namespace RicercaOperativa
                 TotalsVerifiedLabel.Text = "X";
                 TotalsVerifiedLabel.ForeColor = Color.Red;
 
-                NordOvestBTN.Enabled = false;
-                MinimalCostsBTN.Enabled = false;
+                tableTotalsValid = false;
             }
+
+            BtnAlgorithmActivationControlSystem();
         }
 
         private void controlTotal()
@@ -143,13 +159,90 @@ namespace RicercaOperativa
                 DataTable.Rows[nRows].Cells[nCols].Value = totalRowSum();
                 TotalsVerifiedLabel.Text = "✔";
                 TotalsVerifiedLabel.ForeColor = Color.Green;
+
+                tableTotalsValid = true;
             }
             else
             {
                 MessageBox.Show("La somma dei valori non corrisponde o le celle non sono tutte piene!");
                 TotalsVerifiedLabel.Text = "X";
                 TotalsVerifiedLabel.ForeColor = Color.Red;
+
+                tableTotalsValid = false;
             }
+
+            BtnAlgorithmActivationControlSystem();
+        }
+
+        private void controlTotalWithoutMessageBox()
+        {
+            if (TotalRowsController())
+            {
+                DataTable.Rows[nRows].Cells[nCols].Value = totalRowSum();
+                TotalsVerifiedLabel.Text = "✔";
+                TotalsVerifiedLabel.ForeColor = Color.Green;
+
+                tableTotalsValid = true;
+            }
+            else
+            {
+                TotalsVerifiedLabel.Text = "X";
+                TotalsVerifiedLabel.ForeColor = Color.Red;
+
+                tableTotalsValid = false;
+            }
+
+            BtnAlgorithmActivationControlSystem();
+        }
+
+        private bool CellsContainOnlyNumberControl()
+        {
+            foreach (DataGridViewRow row in DataTable.Rows)
+            {
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    if (!IsNumeric(cell.FormattedValue.ToString())) return false;
+                }
+            }
+            return true;
+        }
+
+        private bool IsNumeric(string value)
+        {
+            double result;
+            return double.TryParse(value, out result);
+        }
+
+        private void BtnAlgorithmActivationControlSystem()
+        {
+            if (tableTotalsValid && ControlTableFilled() && CellsContainOnlyNumberControl())
+            {
+                NordOvestBTN.Enabled = true;
+                MinimalCostsBTN.Enabled = true;
+                AllMetodsBTN.Enabled = true;
+            }
+            else
+            {
+                NordOvestBTN.Enabled = false;
+                MinimalCostsBTN.Enabled = false;
+                AllMetodsBTN.Enabled = false;
+            }
+        }
+
+        private bool ControlTableFilled()
+        {
+            foreach (DataGridViewRow row in DataTable.Rows)
+            {
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    if (cell.Value == null || cell.Value.ToString() == "")
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         private void FillTable(object sender, EventArgs e)
@@ -317,6 +410,11 @@ namespace RicercaOperativa
 
         private void NordOvestAlgorithm_Click(object sender, EventArgs e)
         {
+            NordOvestAlgorithmInitialize();
+        }
+
+        private void NordOvestAlgorithmInitialize()
+        {
             if (NordOvestFrame.Controls.Count > 0)
             {
                 NordOvestFrame.Controls.Clear();
@@ -334,8 +432,6 @@ namespace RicercaOperativa
 
             NordOvestAlgorithm(nordOvestGrid);
         }
-
-
 
         private void NordOvestAlgorithm(DataGridView grid)
         {
@@ -467,6 +563,11 @@ namespace RicercaOperativa
 
         private void MinimalCostsAlgorithm_Click(object sender, EventArgs e)
         {
+            MinimalCostsAlgorithmInitialize();
+        }
+
+        private void MinimalCostsAlgorithmInitialize()
+        {
             if (MinimalCostsFrame.Controls.Count > 0)
             {
                 MinimalCostsFrame.Controls.Clear();
@@ -484,7 +585,7 @@ namespace RicercaOperativa
 
             MinimalCostsAlgorithm(minimalCostsGrid);
         }
-        
+
         private void MinimalCostsAlgorithm(DataGridView grid)
         {
             int costoTot = 0;
@@ -574,6 +675,12 @@ namespace RicercaOperativa
                 owIsOpened = true;
                 owWasClosed = false;
             }
+        }
+
+        private void AllMethods_Click(object sender, EventArgs e)
+        {
+            NordOvestAlgorithmInitialize();
+            MinimalCostsAlgorithmInitialize();
         }
     }
 

@@ -49,8 +49,9 @@
             this.DataTable = new System.Windows.Forms.DataGridView();
             this.Frames = new System.Windows.Forms.TabControl();
             this.MainFrame = new System.Windows.Forms.TabPage();
-            this.MinimalCostsFrame = new System.Windows.Forms.TabPage();
             this.NordOvestFrame = new System.Windows.Forms.TabPage();
+            this.MinimalCostsFrame = new System.Windows.Forms.TabPage();
+            this.AllMetodsBTN = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MaxNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MinNum)).BeginInit();
@@ -64,6 +65,7 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.AllMetodsBTN);
             this.panel1.Controls.Add(this.MinimalCostsBTN);
             this.panel1.Controls.Add(this.FillTotalTableBTN);
             this.panel1.Controls.Add(this.NordOvestBTN);
@@ -85,7 +87,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1176, 102);
+            this.panel1.Size = new System.Drawing.Size(1217, 102);
             this.panel1.TabIndex = 0;
             // 
             // MinimalCostsBTN
@@ -346,7 +348,7 @@
             this.Frames.Margin = new System.Windows.Forms.Padding(2);
             this.Frames.Name = "Frames";
             this.Frames.SelectedIndex = 0;
-            this.Frames.Size = new System.Drawing.Size(1176, 333);
+            this.Frames.Size = new System.Drawing.Size(1217, 333);
             this.Frames.TabIndex = 15;
             // 
             // MainFrame
@@ -361,17 +363,6 @@
             this.MainFrame.Text = "Main View";
             this.MainFrame.UseVisualStyleBackColor = true;
             // 
-            // MinimalCostsFrame
-            // 
-            this.MinimalCostsFrame.Location = new System.Drawing.Point(4, 22);
-            this.MinimalCostsFrame.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimalCostsFrame.Name = "MinimalCostsFrame";
-            this.MinimalCostsFrame.Padding = new System.Windows.Forms.Padding(2);
-            this.MinimalCostsFrame.Size = new System.Drawing.Size(1168, 307);
-            this.MinimalCostsFrame.TabIndex = 2;
-            this.MinimalCostsFrame.Text = "MinimalCosts";
-            this.MinimalCostsFrame.UseVisualStyleBackColor = true;
-            // 
             // NordOvestFrame
             // 
             this.NordOvestFrame.Location = new System.Drawing.Point(4, 22);
@@ -383,12 +374,37 @@
             this.NordOvestFrame.Text = "NordOvest";
             this.NordOvestFrame.UseVisualStyleBackColor = true;
             // 
+            // MinimalCostsFrame
+            // 
+            this.MinimalCostsFrame.Location = new System.Drawing.Point(4, 22);
+            this.MinimalCostsFrame.Margin = new System.Windows.Forms.Padding(2);
+            this.MinimalCostsFrame.Name = "MinimalCostsFrame";
+            this.MinimalCostsFrame.Padding = new System.Windows.Forms.Padding(2);
+            this.MinimalCostsFrame.Size = new System.Drawing.Size(1209, 307);
+            this.MinimalCostsFrame.TabIndex = 2;
+            this.MinimalCostsFrame.Text = "Minimi Costi";
+            this.MinimalCostsFrame.UseVisualStyleBackColor = true;
+            // 
+            // AllMetodsBTN
+            // 
+            this.AllMetodsBTN.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.AllMetodsBTN.Enabled = false;
+            this.AllMetodsBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.AllMetodsBTN.Location = new System.Drawing.Point(1008, 53);
+            this.AllMetodsBTN.Margin = new System.Windows.Forms.Padding(2);
+            this.AllMetodsBTN.Name = "AllMetodsBTN";
+            this.AllMetodsBTN.Size = new System.Drawing.Size(164, 37);
+            this.AllMetodsBTN.TabIndex = 17;
+            this.AllMetodsBTN.Text = "Calcola Costi";
+            this.AllMetodsBTN.UseVisualStyleBackColor = false;
+            this.AllMetodsBTN.Click += new System.EventHandler(this.AllMethods_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
-            this.ClientSize = new System.Drawing.Size(1176, 435);
+            this.ClientSize = new System.Drawing.Size(1217, 435);
             this.Controls.Add(this.Frames);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -436,6 +452,7 @@
         private System.Windows.Forms.Button FillTotalTableBTN;
         private System.Windows.Forms.Button MinimalCostsBTN;
         private System.Windows.Forms.TabPage MinimalCostsFrame;
+        private System.Windows.Forms.Button AllMetodsBTN;
     }
 }
 
