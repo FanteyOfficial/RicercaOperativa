@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace RicercaOperativa
@@ -465,7 +466,7 @@ namespace RicercaOperativa
 
             while (currentUP < arr.GetLength(0) - 1 && currentD < arr.GetLength(1) - 1)
             {
-                if (NordOvestFrame.Controls.Count > 0)
+                /*if (NordOvestFrame.Controls.Count > 0)
                 {
                     NordOvestFrame.Controls.Clear();
                 }
@@ -476,9 +477,24 @@ namespace RicercaOperativa
                 nordOvestGrid.ReadOnly = true;
 
                 NordOvestFrame.Controls.Add(nordOvestGrid);
-                Frames.SelectedTab = NordOvestFrame;
+                Frames.SelectedTab = NordOvestFrame;*/
 
-                
+
+                DataGridView nordOvestGrid = TableModifier(Frames.SelectedTab.Controls.OfType<DataGridView>().First());
+                if (NordOvestFrame.Controls.Count > 0)
+                {
+                    NordOvestFrame.Controls.Clear();
+                }
+                nordOvestGrid.Dock = DockStyle.Fill;
+                nordOvestGrid.AutoResizeColumnHeadersHeight();
+                nordOvestGrid.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                nordOvestGrid.ReadOnly = true;
+
+                NordOvestFrame.Controls.Add(nordOvestGrid);
+                Frames.SelectedTab = NordOvestFrame;
+                Frames.SelectedTab.Refresh();
+
+                //TODO: sistemare aggiornamento tabella (non funziona perché non viene mai azzerata la cella dei totali)
 
                 int UPn = arr[currentUP, arr.GetLength(1) - 1];
                 int Dn = arr[arr.GetLength(0) - 1, currentD];
@@ -700,6 +716,28 @@ namespace RicercaOperativa
         {
             NordOvestAlgorithmInitialize();
             MinimalCostsAlgorithmInitialize();
+        }
+
+        private DataGridView TableModifier(DataGridView grid)
+        {
+            for (int i = 0; i < grid.Rows.Count-1; i++)
+            {
+                if ((int)grid.Rows[i].Cells[grid.Columns.Count-1].Value == 0)
+                {
+                    grid.Rows.RemoveAt(i);
+                }
+            }
+            for (int i = 0; i < grid.Columns.Count-1; i++)
+            {
+                if ((int)grid.Rows[grid.Rows.Count - 1].Cells[i].Value == 0)
+                {
+                    grid.Columns.RemoveAt(i);
+                }
+            }
+
+            grid.Refresh();
+
+            return grid;
         }
     }
 
