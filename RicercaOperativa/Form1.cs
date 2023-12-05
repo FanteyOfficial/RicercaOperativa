@@ -20,6 +20,7 @@ namespace RicercaOperativa
         public Form1()
         {
             InitializeComponent();
+
             Frames.Controls.Remove(NordOvestFrame);
             Frames.Controls.Remove(MinimalCostsFrame);
         }
@@ -61,7 +62,7 @@ namespace RicercaOperativa
             TotalsGeneratorBTN.Enabled = true;
             FillTotalTableBTN.Enabled = true;
 
-            controlTotalWithoutMessageBox();
+            controlTotal();
             WireUpDataGridViewEvents(DataTable);
         }
 
@@ -73,7 +74,7 @@ namespace RicercaOperativa
 
         private void CellEndEditHandler(object sender, DataGridViewCellEventArgs e)
         {
-            controlTotalWithoutMessageBox();
+            controlTotal();
             BtnAlgorithmActivationControlSystem();
         }
 
@@ -154,49 +155,14 @@ namespace RicercaOperativa
         // controllo se i totali delle righe e colonne sono uguali
         private void controlTotal(object sender, EventArgs e)
         {
-            if (TotalRowsController())
-            {
-                DataTable.Rows[nRows].Cells[nCols].Value = totalRowSum();
-                TotalsVerifiedLabel.Text = "✔";
-                TotalsVerifiedLabel.ForeColor = Color.Green;
-                
-                tableTotalsValid = true;
-            } 
-            else
+            controlTotal();
+            if (!tableTotalsValid)
             {
                 MessageBox.Show("La somma dei valori non corrisponde o le celle non sono tutte piene!");
-                TotalsVerifiedLabel.Text = "X";
-                TotalsVerifiedLabel.ForeColor = Color.Red;
-
-                tableTotalsValid = false;
             }
-
-            BtnAlgorithmActivationControlSystem();
         }
 
         private void controlTotal()
-        {
-            if (TotalRowsController())
-            {
-                DataTable.Rows[nRows].Cells[nCols].Value = totalRowSum();
-                TotalsVerifiedLabel.Text = "✔";
-                TotalsVerifiedLabel.ForeColor = Color.Green;
-
-                tableTotalsValid = true;
-            }
-            else
-            {
-                MessageBox.Show("La somma dei valori non corrisponde o le celle non sono tutte piene!");
-                TotalsVerifiedLabel.Text = "X";
-                TotalsVerifiedLabel.ForeColor = Color.Red;
-
-                tableTotalsValid = false;
-            }
-
-            BtnAlgorithmActivationControlSystem();
-        }
-
-        private void controlTotalWithoutMessageBox()
         {
             if (TotalRowsController())
             {
@@ -269,20 +235,8 @@ namespace RicercaOperativa
 
         private void FillTable(object sender, EventArgs e)
         {
-            SetDefaultNumberGenerator();
             Frames.SelectedTab = MainFrame;
-
-            int min = (int) MinNum.Value;
-            int max = (int) MaxNum.Value;
-
-            Random r = new Random();
-
-            for (int i = 0; i < nRows; i++) { 
-                for (int j = 0; j < nCols; j++)
-                {
-                    DataTable.Rows[i].Cells[j].Value = r.Next(min, max);
-                }
-            }
+            FillTable();
         }
 
         private void FillTable()
@@ -313,43 +267,8 @@ namespace RicercaOperativa
         // riempimento casuale dei totali
         private void FillTotals(object sender, EventArgs e)
         {
-            SetDefaultNumberGenerator();
             Frames.SelectedTab = MainFrame;
-
-            Random r = new Random();
-
-            int min = (int) MinNum.Value;
-            int max = (int) MaxNum.Value;
-
-            for (int i = 0; i < nCols; i++)
-            {
-                //Console.WriteLine(nRows);
-                //Console.WriteLine(i);
-
-                DataTable.Rows[nRows].Cells[i].Value = r.Next(min, max);
-            }
-
-            foreach (DataGridViewRow row in DataTable.Rows)
-            {
-                if (!row.Cells[nCols].ReadOnly)
-                {
-                    row.Cells[nCols].Value = r.Next(min, max);
-                }
-            }
-            
-            if (!TotalRowsController())
-            {
-                if (totalRowSum() > totalColumnSum())
-                {
-                    DataTable.Rows[nRows-1].Cells[nCols].Value = (int) DataTable.Rows[nRows-1].Cells[nCols].Value + (totalRowSum() - totalColumnSum());
-                }
-                else
-                {
-                    DataTable.Rows[nRows].Cells[nCols-1].Value = (int) DataTable.Rows[nRows].Cells[nCols-1].Value + (totalColumnSum() - totalRowSum());
-                }
-                
-            }
-            controlTotal();
+            FillTotals();
         }
 
         private void FillTotals()
@@ -394,9 +313,9 @@ namespace RicercaOperativa
 
         private void FillTotalTable(object sender, EventArgs e)
         {
+            Frames.SelectedTab = MainFrame;
             FillTable();
             FillTotals();
-            Frames.SelectedTab = MainFrame;
         }
 
         private DataGridView CloneDataGrid(DataGridView mainDataGridView)
@@ -620,19 +539,6 @@ namespace RicercaOperativa
 
             while (currentUP < arr.GetLength(0) - 1 && currentD < arr.GetLength(1) - 1)
             {
-                /*if (MinimalCostsFrame.Controls.Count > 0)
-                {
-                    MinimalCostsFrame.Controls.Clear();
-                }
-                DataGridView minimalCostGrid = DataGridFromMatrix(arr);
-                minimalCostGrid.Dock = DockStyle.Fill;
-                minimalCostGrid.AutoResizeColumnHeadersHeight();
-                minimalCostGrid.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
-                minimalCostGrid.ReadOnly = true;
-
-                MinimalCostsFrame.Controls.Add(minimalCostGrid);
-                Frames.SelectedTab = MinimalCostsFrame;*/
-
                 int minCost = int.MaxValue;
                 int minCostRow = -1;
                 int minCostCol = -1;
